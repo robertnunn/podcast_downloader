@@ -38,10 +38,11 @@ def save_file(folder, filename, source_url):
     for i in replacement:
         filename = filename.replace(i[0], i[1])
     
-    if os.path.isfile(full_path := folder+filename):
+    if os.path.isfile(full_path := folder+filename):  # walrus operator is pretty cool
         print(full_path, ' already exists')
     else:
         try:
+            print('trying: ',full_path)
             audio = requests.get(source_url)
             audio.raise_for_status()
             with open(full_path, 'wb') as ep_audio:
@@ -100,7 +101,7 @@ def stitcher_download(podcast, target_folder):
         # ep_name = soup.find(id="now_playing_title").text
         foldername = f'{target_folder}/{show_name}/'
         filename = f'{filenames[i]} - {ep_name}.mp3'
-        print('foldername: ', foldername)
+        # print('filename: ', foldername+filename)
         save_file(foldername, filename, ep_url)
         
 
@@ -124,4 +125,5 @@ except:
     pass
 dest_folder = 'D:/Podcasts/New'
 
-download_podcast(podcasts[0], dest_folder)
+for i in podcasts:
+    download_podcast(i, dest_folder)
